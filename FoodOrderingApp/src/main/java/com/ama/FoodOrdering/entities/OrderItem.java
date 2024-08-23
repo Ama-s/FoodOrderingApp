@@ -18,6 +18,11 @@ public class OrderItem {
     //indicates which column in the OrderItem table references the primary key of the Orders table
     private Orders order;
 
+    // not sure yet
+    @OneToOne
+    @JoinColumn(name = "menuItem_id", nullable = false)
+    private MenuItem menuItem;
+
     @Column(name = "menu_item_id")
     private Long menuItemId;
 
