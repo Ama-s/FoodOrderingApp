@@ -15,6 +15,25 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.AUTO)
     // to specify how the primary key should be generated
 
+    // OneToMany relationship with Orders
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    // this is the parent entity
+    // "user" specifies the column/field in the Orders class that owns the relationship
+    // For example In the Orders class, there would be a field like private Users user;
+
+    // CascadeType.ALL specifies that any operations performed on the Users entity (like save, update, delete) will
+    // also be applied to the associated Orders entities. So, if you delete a User, all associated Orders will also
+    // be deleted.
+
+    // When orphanRemoval is set to true, any Orders entity that is removed from the orders list in Users will also be
+    // deleted from the database.
+    private List<Orders> orders;
+    // it reflects the one-to-many relationship. E.g the list can contain the number of orders Deborah has
+
+    @OneToMany(mappedBy = "user")
+    private Set<Invoice> invoices;
+
+
     @Column(name = "id", unique = true, nullable = false)
     private UUID id;
 
@@ -47,24 +66,6 @@ public class Users {
 
     @Column(name = "deleted_by")
     private UUID deletedBy;
-
-    // OneToMany relationship with Orders
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    // "user" specifies the column/field in the Orders class that owns the relationship
-    // For example In the Orders class, there would be a field like private Users user;
-
-    // CascadeType.ALL specifies that any operations performed on the Users entity (like save, update, delete) will
-    // also be applied to the associated Orders entities. So, if you delete a User, all associated Orders will also
-    // be deleted.
-
-    // When orphanRemoval is set to true, any Orders entity that is removed from the orders list in Users will also be
-    // deleted from the database.
-    private List<Orders> orders;
-    // it reflects the one-to-many relationship. E.g the list can contain the number of orders Deborah has
-
-    @OneToMany(mappedBy = "user")
-    private Set<Invoice> invoices;
-
 
     // Getters and Setters
     public UUID getId() {

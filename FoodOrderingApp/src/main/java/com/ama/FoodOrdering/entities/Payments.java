@@ -9,8 +9,8 @@ public class Payments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "payment_id")
-    private Long paymentId;
+    @Column(name = "id")
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
@@ -26,12 +26,12 @@ public class Payments {
     private String status;
 
     // Getters and Setters
-    public Long getPaymentId() {
-        return paymentId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
+    public void setId(Long paymentId) {
+        this.id = paymentId;
     }
 
     public Invoice getInvoice() {
