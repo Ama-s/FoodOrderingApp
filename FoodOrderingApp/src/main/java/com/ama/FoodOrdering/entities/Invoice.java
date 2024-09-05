@@ -136,4 +136,12 @@ public class Invoice {
     public void setOrder(Orders order) {
         this.order = order;
     }
+
+    public Payments getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payments payment) {
+        this.payment = payment;
+    }
 }

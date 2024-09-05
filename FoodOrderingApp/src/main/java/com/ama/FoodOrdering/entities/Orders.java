@@ -143,4 +143,12 @@ public class Orders {
     public void setDeletedBy(UUID deletedBy) {
         this.deletedBy = deletedBy;
     }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
 }
