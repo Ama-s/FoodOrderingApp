@@ -1,5 +1,6 @@
 package com.ama.FoodOrdering.entities;
 
+import com.ama.FoodOrdering.enums.PaymentStatus;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -16,14 +17,13 @@ public class Payments {
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
 
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "payment_issue_date")
+    private LocalDate paymentIssueDate;
 
-    @Column(name = "payment_date")
-    private LocalDate paymentDate;
 
-    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'pending'")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
+    private PaymentStatus status;
 
     // Getters and Setters
     public Long getId() {
@@ -42,27 +42,19 @@ public class Payments {
         this.invoice = invoice;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public LocalDate getPaymentIssueDate() {
+        return paymentIssueDate;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setPaymentIssueDate(LocalDate paymentIssueDate) {
+        this.paymentIssueDate = paymentIssueDate;
     }
 
-    public LocalDate getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public String getStatus() {
+    public PaymentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PaymentStatus status) {
         this.status = status;
     }
 }

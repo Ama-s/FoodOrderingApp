@@ -11,7 +11,5 @@ public interface PaymentsService {
 
     public List<Payments> getAccountSummary();
 
-    public Payments getTotalPriceOrdered();
-
     public List<Payments> getMonthlyBillByUser(UUID user_id);
 }

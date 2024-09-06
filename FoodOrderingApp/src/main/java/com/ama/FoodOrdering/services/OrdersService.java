@@ -11,6 +11,8 @@ public interface OrdersService {
 
     public OrderItem addOrderItem();
 
+    public OrderItem deleteOrderItem();
+
     public void deleteOrder();
 
     public List<Orders> getOrderHistory();
@@ -18,6 +20,8 @@ public interface OrdersService {
     public OrderItem markFavourite();
 
     public int getTotalQuantityOrdered();
+
+    public Payments getTotalOrderPrice();
 
     public Orders viewPastOrdersByUser(UUID user_id);
 }
