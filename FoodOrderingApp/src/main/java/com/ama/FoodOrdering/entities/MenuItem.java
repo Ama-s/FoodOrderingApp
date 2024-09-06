@@ -2,6 +2,7 @@ package com.ama.FoodOrdering.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +14,8 @@ public class MenuItem {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    //is it one to many or one to one with OrderItem table?
+    @OneToMany(mappedBy = "menuItem")
+    private Set<OrderItem> orderItems;
 
     @Column(name = "name", length = 50)
     private String name;

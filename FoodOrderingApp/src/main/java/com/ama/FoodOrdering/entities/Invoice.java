@@ -13,6 +13,17 @@ public class Invoice {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Users user;
+
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Orders order;
+
+    @OneToOne(mappedBy = "invoice")
+    private Payments payment;
+
     @Column(name = "total_amount")
     private Integer totalAmount;
 
@@ -36,17 +47,6 @@ public class Invoice {
 
     @Column(name = "deleted_by")
     private UUID deletedBy;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users user;
-
-    @OneToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Orders order;
-
-    @OneToOne(mappedBy = "invoice")
-    private Payments payment;
 
     // Getters and Setters
     public Long getId() {
