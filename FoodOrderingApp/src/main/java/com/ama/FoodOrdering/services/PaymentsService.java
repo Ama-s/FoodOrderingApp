@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PaymentsService {
-    public int getTotalPaid();
+    public Integer getTotalPaid();
 
-    public int getTotalOwed();
+    public Integer getTotalOwed();
 
     public List<Payments> getAccountSummary();
 

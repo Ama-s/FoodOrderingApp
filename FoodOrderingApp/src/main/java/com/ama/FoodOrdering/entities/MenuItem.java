@@ -12,7 +12,7 @@ public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
-    private Long id;
+    private String id;
 
     @OneToMany(mappedBy = "menuItem")
     private Set<OrderItem> orderItems;
@@ -48,11 +48,11 @@ public class MenuItem {
     private UUID deletedBy;
 
     // Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
