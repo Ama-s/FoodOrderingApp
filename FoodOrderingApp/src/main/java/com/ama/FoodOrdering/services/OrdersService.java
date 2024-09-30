@@ -23,5 +23,5 @@ public interface OrdersService {
 
     public Payments getTotalOrderPrice();
 
-    public Orders viewPastOrdersByUser(UUID user_id);
+    public Orders viewPastOrdersByUser(Long user_id);
 }

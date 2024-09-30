@@ -9,12 +9,12 @@ import java.time.LocalDate;
 public class Payments {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @JoinColumn(name = "invoice_id", nullable = false, referencedColumnName = "id")
     private Invoice invoice;
 
     @Column(name = "payment_issue_date")

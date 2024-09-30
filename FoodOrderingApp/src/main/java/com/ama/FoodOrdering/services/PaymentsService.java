@@ -11,5 +11,5 @@ public interface PaymentsService {
 
     public List<Payments> getAccountSummary();
 
-    public List<Payments> getMonthlyBillByUser(UUID user_id);
+    public List<Payments> getMonthlyBillByUser(Long user_id);
 }

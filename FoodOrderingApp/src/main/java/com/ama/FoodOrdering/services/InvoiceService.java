@@ -10,5 +10,5 @@ public interface InvoiceService {
 
     public void sendInvoice(Invoice invoice);
 
-    public List<Invoice> getInvoicesByUser(UUID user_id);
+    public List<Invoice> getInvoicesByUser(Long user_id);
 }
