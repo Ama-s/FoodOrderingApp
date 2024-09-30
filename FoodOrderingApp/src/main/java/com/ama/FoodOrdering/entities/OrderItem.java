@@ -9,7 +9,7 @@ import java.util.UUID;
 public class OrderItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
@@ -29,19 +29,19 @@ public class OrderItem {
     private LocalDateTime createdOn;
 
     @Column(name = "created_by")
-    private UUID createdBy;
+    private Long createdBy;
 
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @Column(name = "modified_by")
-    private UUID modifiedBy;
+    private Long modifiedBy;
 
     @Column(name = "deleted_on")
     private LocalDateTime deletedOn;
 
     @Column(name = "deleted_by")
-    private UUID deletedBy;
+    private Long deletedBy;
 
     // Getters and Setters
 
@@ -78,11 +78,11 @@ public class OrderItem {
         this.createdOn = createdOn;
     }
 
-    public UUID getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(UUID createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -94,11 +94,11 @@ public class OrderItem {
         this.modifiedOn = modifiedOn;
     }
 
-    public UUID getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(UUID modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
@@ -110,11 +110,11 @@ public class OrderItem {
         this.deletedOn = deletedOn;
     }
 
-    public UUID getDeletedBy() {
+    public Long getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeletedBy(UUID deletedBy) {
+    public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
     }
 

@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     // to specify how the primary key should be generated
 
     @Column(name = "id", unique = true, nullable = false)
-    private UUID id;
+    private Long id;
 
     @Column(name = "name", length = 100)
     private String name;
@@ -34,19 +34,19 @@ public class Users {
     private LocalDateTime createdOn;
 
     @Column(name = "created_by")
-    private UUID createdBy;
+    private Long createdBy;
 
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @Column(name = "modified_by")
-    private UUID modifiedBy;
+    private Long modifiedBy;
 
     @Column(name = "deleted_on")
     private LocalDateTime deletedOn;
 
     @Column(name = "deleted_by")
-    private UUID deletedBy;
+    private Long deletedBy;
 
     // OneToMany relationship with Orders
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,11 +67,11 @@ public class Users {
     private Set<Invoice> invoices;
 
     // Getters and Setters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -115,11 +115,11 @@ public class Users {
         this.createdOn = createdOn;
     }
 
-    public UUID getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(UUID createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -131,11 +131,11 @@ public class Users {
         this.modifiedOn = modifiedOn;
     }
 
-    public UUID getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(UUID modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
@@ -147,11 +147,11 @@ public class Users {
         this.deletedOn = deletedOn;
     }
 
-    public UUID getDeletedBy() {
+    public Long getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeletedBy(UUID deletedBy) {
+    public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
     }
 }
