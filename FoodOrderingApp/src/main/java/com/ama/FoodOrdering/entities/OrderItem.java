@@ -10,17 +10,16 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", unique = true, nullable = false)
-    private Long id;
+    @Column(name = "order_item_id", unique = true, nullable = false)
+    private Long OrderItemId;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "order_id", nullable = false)
     //indicates which column in the OrderItem table references the primary key of the Orders table
     private Orders order;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_item_id", nullable = false, referencedColumnName = "id")
-    private MenuItem menuItem;
+    @Column(name = "menu_item_id")
+    private Long menuItemId;
 
     @Column(name = "quantity")
     private Short quantity;
@@ -44,13 +43,14 @@ public class OrderItem {
     private UUID deletedBy;
 
     // Getters and Setters
+    // Getters and Setters
 
-    public Long getId() {
-        return id;
+    public Long getOrderItemId() {
+        return OrderItemId;
     }
 
-    public void setId(Long orderItemId) {
-        this.id = orderItemId;
+    public void setOrderItemId(Long orderItemId) {
+        this.OrderItemId = orderItemId;
     }
 
     public Orders getOrder() {
@@ -59,6 +59,14 @@ public class OrderItem {
 
     public void setOrder(Orders order) {
         this.order = order;
+    }
+
+    public Long getMenuItemId() {
+        return menuItemId;
+    }
+
+    public void setMenuItemId(Long menuItemId) {
+        this.menuItemId = menuItemId;
     }
 
     public Short getQuantity() {
