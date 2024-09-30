@@ -50,6 +50,8 @@ public class Users {
 
     // OneToMany relationship with Orders
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Orders> orders;
+    // parent entity
     // "user" specifies the column/field in the Orders class that owns the relationship
     // For example In the Orders class, there would be a field like private Users user;
 
@@ -59,12 +61,10 @@ public class Users {
 
     // When orphanRemoval is set to true, any Orders entity that is removed from the orders list in Users will also be
     // deleted from the database.
-    private List<Orders> orders;
-    // it reflects the one-to-many relationship. E.g the list can contain the number of orders Deborah has
+    // it reflects the one-to-many relationship. E.g. the list can contain the number of orders Deborah has
 
     @OneToMany(mappedBy = "user")
     private Set<Invoice> invoices;
-
 
     // Getters and Setters
     public UUID getId() {

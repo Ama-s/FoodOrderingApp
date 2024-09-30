@@ -16,11 +16,10 @@ public class Orders {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    //child entity
     //indicates which column in the Orders table references the primary key of the Users table
     private Users user;
-
-
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;

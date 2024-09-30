@@ -2,6 +2,7 @@ package com.ama.FoodOrdering.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
