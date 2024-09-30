@@ -1,6 +1,5 @@
 package com.ama.FoodOrdering.entities;
 
-import com.ama.FoodOrdering.enums.InvoiceStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,9 +27,8 @@ public class Invoice {
     @Column(name = "total_amount")
     private Integer totalAmount;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'DRAFT'")
-    private InvoiceStatus status;
+    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'draft'")
+    private String status;
 
     @Column(name = "created_on")
     private LocalDateTime createdOn;
@@ -67,11 +65,11 @@ public class Invoice {
         this.totalAmount = totalAmount;
     }
 
-    public InvoiceStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(InvoiceStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
