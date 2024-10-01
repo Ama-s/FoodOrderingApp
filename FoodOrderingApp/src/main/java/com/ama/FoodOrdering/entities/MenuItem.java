@@ -12,7 +12,7 @@ public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private Long id;
+    private String id;
 
     //is it one to many or one to one with OrderItem table?
 
@@ -47,11 +47,11 @@ public class MenuItem {
     private Long deletedBy;
 
     // Getters and Setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
