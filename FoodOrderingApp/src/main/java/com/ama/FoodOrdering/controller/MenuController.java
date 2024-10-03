@@ -35,12 +35,8 @@ public class MenuController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteMenuItem(@PathVariable("id") String id){
         // had to change the data type of id from UUID to String, I was getting an error and couldn't use UUID because the method findById accepts only Strings
-        try {
-            menuService.deleteMenuItem(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ChangeSetPersister.NotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        menuService.deleteMenuItem(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/addMenu")
@@ -55,7 +51,7 @@ public class MenuController {
         return new ResponseEntity<List<MenuItem>>(newDailyMenu, HttpStatus.OK);
     }
 
-    @GetMapping("/getMenuItem")
+    @GetMapping("/getDailySuggestion")
     public ResponseEntity<MenuItem> getDailySuggestion() {
         MenuItem newDailySuggestion = menuService.getDailySuggestion();
         return new ResponseEntity<MenuItem>(newDailySuggestion, HttpStatus.OK);

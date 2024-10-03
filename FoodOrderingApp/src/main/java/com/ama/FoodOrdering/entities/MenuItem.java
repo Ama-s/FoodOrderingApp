@@ -1,6 +1,10 @@
 package com.ama.FoodOrdering.entities;
 
+import com.ama.FoodOrdering.enums.MenuStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -10,11 +14,11 @@ import java.util.UUID;
 public class MenuItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     //is it one to many or one to one with OrderItem table?
+    // I'm yet to implement the relationship btw MenuItem and OrderItem
 
     @Column(name = "name", length = 50)
     private String name;
@@ -25,15 +29,18 @@ public class MenuItem {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "availability_status", length = 20)
-    private String availabilityStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20)
+    private MenuStatus status;
 
-    @Column(name = "created_on")
+    @CreationTimestamp
+    @Column(name = "created_on", updatable = false)
     private LocalDateTime createdOn;
 
     @Column(name = "created_by")
     private Long createdBy;
 
+    @UpdateTimestamp
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
@@ -45,6 +52,18 @@ public class MenuItem {
 
     @Column(name = "deleted_by")
     private Long deletedBy;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdBy = 1L; // Assuming user ID 1 for now, ideally I'll get current user's ID
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.modifiedBy = 1L; // Assuming user ID 1 for now, ideally I'll get current user's ID
+    }
+
+    // yet to figure out how to automate deletedOn and deletedBy using the current's ID
 
     // Getters and Setters
     public String getId() {
@@ -79,12 +98,12 @@ public class MenuItem {
         this.price = price;
     }
 
-    public String getAvailabilityStatus() {
-        return availabilityStatus;
+    public MenuStatus getStatus() {
+        return status;
     }
 
-    public void setAvailabilityStatus(String availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
+    public void setStatus(MenuStatus status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedOn() {

@@ -7,7 +7,7 @@ import java.util.List;
 public interface MenuService {
     public MenuItem addMenuItem(MenuItem menuItem);
 
-    public void deleteMenuItem(String menu_id) throws ChangeSetPersister.NotFoundException;
+    public void deleteMenuItem(String menu_id);
 
     public List<MenuItem> addMenu(List<MenuItem> menuItems);
 

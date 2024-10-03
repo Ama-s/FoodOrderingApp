@@ -12,10 +12,8 @@ public interface MenuItemRepository extends JpaRepository <MenuItem, String> {
     // query to get daily menu
     List<MenuItem> findAll(); // this will return all MenuItem objects from the database
 
-    Optional<MenuItem> findById(String id);
-
     // a custom query is created to select a random menu item.
-    @Query(value = "SELECT * FROM MenuItem ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM menu_item ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
     Optional<MenuItem> findRandomMenuItem();
 
     // Method to delete a menu item by its id

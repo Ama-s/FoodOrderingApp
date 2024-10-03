@@ -23,11 +23,10 @@ public class MenuServiceImp implements MenuService {
     }
 
     @Override
-    public void deleteMenuItem(String menu_id) throws ChangeSetPersister.NotFoundException {
-        if(menuItemRepository.findById(menu_id).isEmpty()){
-            throw new ChangeSetPersister.NotFoundException();
-        }
+    public void deleteMenuItem(String id) {
+        menuItemRepository.deleteById(id); // This will permanently remove the menu item
     }
+
 
     @Override
     public List<MenuItem> addMenu(List<MenuItem> menuItems) {
