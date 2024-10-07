@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface MenuItemRepository extends JpaRepository <MenuItem, String> {
+public interface MenuItemRepository extends JpaRepository <MenuItem, Long> {
     // query to get daily menu
     List<MenuItem> findAll(); // this will return all MenuItem objects from the database
 
@@ -17,5 +17,5 @@ public interface MenuItemRepository extends JpaRepository <MenuItem, String> {
     Optional<MenuItem> findRandomMenuItem();
 
     // Method to delete a menu item by its id
-    void deleteById(String menu_id);
+    void deleteById(Long menu_id);
 }

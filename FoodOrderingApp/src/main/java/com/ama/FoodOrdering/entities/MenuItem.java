@@ -14,8 +14,9 @@ import java.util.UUID;
 public class MenuItem {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private String id = UUID.randomUUID().toString();
+    private Long id;
 
     //is it one to many or one to one with OrderItem table?
     // I'm yet to implement the relationship btw MenuItem and OrderItem
@@ -53,24 +54,13 @@ public class MenuItem {
     @Column(name = "deleted_by")
     private Long deletedBy;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdBy = 1L; // Assuming user ID 1 for now, ideally I'll get current user's ID
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.modifiedBy = 1L; // Assuming user ID 1 for now, ideally I'll get current user's ID
-    }
-
-    // yet to figure out how to automate deletedOn and deletedBy using the current's ID
 
     // Getters and Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

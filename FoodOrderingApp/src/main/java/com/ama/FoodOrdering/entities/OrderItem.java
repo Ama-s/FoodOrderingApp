@@ -25,32 +25,14 @@ public class OrderItem {
     @Column(name = "quantity")
     private Short quantity;
 
-    @Column(name = "created_on")
-    private LocalDateTime createdOn;
-
-    @Column(name = "created_by")
-    private Long createdBy;
-
-    @Column(name = "modified_on")
-    private LocalDateTime modifiedOn;
-
-    @Column(name = "modified_by")
-    private Long modifiedBy;
-
-    @Column(name = "deleted_on")
-    private LocalDateTime deletedOn;
-
-    @Column(name = "deleted_by")
-    private Long deletedBy;
-
     // Getters and Setters
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long orderItemId) {
-        this.id = orderItemId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Orders getOrder() {
@@ -61,6 +43,13 @@ public class OrderItem {
         this.order = order;
     }
 
+    public MenuItem getMenuItem() {
+        return menuItem;
+    }
+
+    public void setMenuItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
+    }
 
     public Short getQuantity() {
         return quantity;
@@ -68,54 +57,6 @@ public class OrderItem {
 
     public void setQuantity(Short quantity) {
         this.quantity = quantity;
-    }
-
-    public LocalDateTime getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getModifiedOn() {
-        return modifiedOn;
-    }
-
-    public void setModifiedOn(LocalDateTime modifiedOn) {
-        this.modifiedOn = modifiedOn;
-    }
-
-    public Long getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(Long modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public LocalDateTime getDeletedOn() {
-        return deletedOn;
-    }
-
-    public void setDeletedOn(LocalDateTime deletedOn) {
-        this.deletedOn = deletedOn;
-    }
-
-    public Long getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
     }
 
 }

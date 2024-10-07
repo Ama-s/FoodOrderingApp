@@ -2,10 +2,12 @@ package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.OrderStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "Orders")
@@ -22,7 +24,7 @@ public class Orders {
     //indicates which column in the Orders table references the primary key of the Users table
     private Users user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
     @OneToOne(mappedBy = "order")
@@ -31,6 +33,7 @@ public class Orders {
     @Column(name = "order_date")
     private LocalDate orderDate;
 
+    // set the due date to 30 days after order_date
     @Column(name = "due_date")
     private LocalDate dueDate;
 
@@ -38,23 +41,15 @@ public class Orders {
     @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'RECEIVED'")
     private OrderStatus status;
 
-    @Column(name = "created_on")
-    private LocalDateTime createdOn;
-
     @Column(name = "created_by")
     private Long createdBy;
 
+    @UpdateTimestamp
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @Column(name = "modified_by")
     private Long modifiedBy;
-
-    @Column(name = "deleted_on")
-    private LocalDateTime deletedOn;
-
-    @Column(name = "deleted_by")
-    private Long deletedBy;
 
     // Getters and Setters
     public Long getId() {
@@ -71,6 +66,14 @@ public class Orders {
 
     public void setUser(Users user) {
         this.user = user;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems){
+        this.orderItems = orderItems;
     }
 
     public LocalDate getOrderDate() {
@@ -97,14 +100,6 @@ public class Orders {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
-    }
-
     public Long getCreatedBy() {
         return createdBy;
     }
@@ -129,21 +124,6 @@ public class Orders {
         this.modifiedBy = modifiedBy;
     }
 
-    public LocalDateTime getDeletedOn() {
-        return deletedOn;
-    }
-
-    public void setDeletedOn(LocalDateTime deletedOn) {
-        this.deletedOn = deletedOn;
-    }
-
-    public Long getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
-    }
 
     public Invoice getInvoice() {
         return invoice;
@@ -152,4 +132,5 @@ public class Orders {
     public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
     }
+
 }

@@ -20,29 +20,36 @@ public class MenuController {
     MenuService menuService;
 
     // this means when you go to the /add url, you add the details of the menuItem
-    @PostMapping("/addItem")
-    public ResponseEntity<MenuItem> addMenuItem(@RequestBody MenuItem menuItem) {
+    @PostMapping("/addItem/{admin_id}")
+    public ResponseEntity<MenuItem> addMenuItem(@RequestBody MenuItem menuItem, @PathVariable("admin_id") Long admin_id){
         // The @RequestBody annotation converts the JSON to a MenuItem object.
 
-        MenuItem newMenuItem = menuService.addMenuItem(menuItem);
-        return new ResponseEntity<>(newMenuItem, HttpStatus.CREATED);
+        try {
+            MenuItem newMenuItem = menuService.addMenuItem(menuItem, admin_id);
+            return new ResponseEntity<>(newMenuItem, HttpStatus.CREATED);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // The method returns a ResponseEntity containing the newly created MenuItem
         // and a 201 Created status code, which tells the client that the request was successful
         // and a new resource was created.
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteMenuItem(@PathVariable("id") String id){
-        // had to change the data type of id from UUID to String, I was getting an error and couldn't use UUID because the method findById accepts only Strings
-        menuService.deleteMenuItem(id);
+    @DeleteMapping("/delete/{id}/{admin_id}")
+    public ResponseEntity<Void> deleteMenuItem(@PathVariable("id") Long id, @PathVariable("admin_id") Long admin_id) throws ChangeSetPersister.NotFoundException {
+        menuService.deleteMenuItem(id, admin_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/addMenu")
-    public ResponseEntity<List<MenuItem>> addMenu(@RequestBody List<MenuItem> menuItems) {
-        List<MenuItem> newMenuList = menuService.addMenu(menuItems);
-        return new ResponseEntity<List<MenuItem>>(newMenuList, HttpStatus.CREATED);
+    @PostMapping("/addMenu/{admin_id}")
+    public ResponseEntity<List<MenuItem>> addMenu(@RequestBody List<MenuItem> menuItems, @PathVariable("admin_id") Long admin_id) {
+        try {
+            List<MenuItem> newMenuItems = menuService.addMenu(menuItems, admin_id);
+            return new ResponseEntity<>(newMenuItems, HttpStatus.CREATED);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/dailyMenu")
@@ -56,4 +63,6 @@ public class MenuController {
         MenuItem newDailySuggestion = menuService.getDailySuggestion();
         return new ResponseEntity<MenuItem>(newDailySuggestion, HttpStatus.OK);
     }
+
+    // might have to add @PutMapping to update or make changes to existing MenuItems or Menu, that is where I'll implement modifiedOn and modifiedBy
 }
