@@ -1,6 +1,10 @@
 package com.ama.FoodOrdering.entities;
 
+import com.ama.FoodOrdering.enums.InvoiceStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -9,33 +13,9 @@ import java.util.UUID;
 public class Invoice {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
-
-    @Column(name = "total_amount")
-    private Integer totalAmount;
-
-    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'draft'")
-    private String status;
-
-    @Column(name = "created_on")
-    private LocalDateTime createdOn;
-
-    @Column(name = "created_by")
-    private UUID createdBy;
-
-    @Column(name = "modified_on")
-    private LocalDateTime modifiedOn;
-
-    @Column(name = "modified_by")
-    private UUID modifiedBy;
-
-    @Column(name = "deleted_on")
-    private LocalDateTime deletedOn;
-
-    @Column(name = "deleted_by")
-    private UUID deletedBy;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -47,6 +27,27 @@ public class Invoice {
 
     @OneToOne(mappedBy = "invoice")
     private Payments payment;
+
+    @Column(name = "total_amount")
+    private Integer totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'DRAFT'")
+    private InvoiceStatus status;
+
+    @CreationTimestamp
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
+
+    @Column(name = "created_by")
+    private Long createdBy;
+
+    @UpdateTimestamp
+    @Column(name = "modified_on")
+    private LocalDateTime modifiedOn;
+
+    @Column(name = "modified_by")
+    private Long modifiedBy;
 
     // Getters and Setters
     public Long getId() {
@@ -65,11 +66,11 @@ public class Invoice {
         this.totalAmount = totalAmount;
     }
 
-    public String getStatus() {
+    public InvoiceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
 
@@ -81,11 +82,11 @@ public class Invoice {
         this.createdOn = createdOn;
     }
 
-    public UUID getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(UUID createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -97,28 +98,12 @@ public class Invoice {
         this.modifiedOn = modifiedOn;
     }
 
-    public UUID getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(UUID modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
-    }
-
-    public LocalDateTime getDeletedOn() {
-        return deletedOn;
-    }
-
-    public void setDeletedOn(LocalDateTime deletedOn) {
-        this.deletedOn = deletedOn;
-    }
-
-    public UUID getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(UUID deletedBy) {
-        this.deletedBy = deletedBy;
     }
 
     public Users getUser() {

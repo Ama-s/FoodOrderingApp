@@ -1,7 +1,12 @@
 package com.ama.FoodOrdering.entities;
 
+import com.ama.FoodOrdering.enums.MenuStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -9,11 +14,12 @@ import java.util.UUID;
 public class MenuItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     //is it one to many or one to one with OrderItem table?
+    // I'm yet to implement the relationship btw MenuItem and OrderItem
 
     @Column(name = "name", length = 50)
     private String name;
@@ -24,26 +30,30 @@ public class MenuItem {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "availability_status", length = 20)
-    private String availabilityStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20)
+    private MenuStatus status;
 
-    @Column(name = "created_on")
+    @CreationTimestamp
+    @Column(name = "created_on", updatable = false)
     private LocalDateTime createdOn;
 
     @Column(name = "created_by")
-    private UUID createdBy;
+    private Long createdBy;
 
+    @UpdateTimestamp
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @Column(name = "modified_by")
-    private UUID modifiedBy;
+    private Long modifiedBy;
 
     @Column(name = "deleted_on")
     private LocalDateTime deletedOn;
 
     @Column(name = "deleted_by")
-    private UUID deletedBy;
+    private Long deletedBy;
+
 
     // Getters and Setters
     public Long getId() {
@@ -78,12 +88,12 @@ public class MenuItem {
         this.price = price;
     }
 
-    public String getAvailabilityStatus() {
-        return availabilityStatus;
+    public MenuStatus getStatus() {
+        return status;
     }
 
-    public void setAvailabilityStatus(String availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
+    public void setStatus(MenuStatus status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedOn() {
@@ -94,11 +104,11 @@ public class MenuItem {
         this.createdOn = createdOn;
     }
 
-    public UUID getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(UUID createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -110,11 +120,11 @@ public class MenuItem {
         this.modifiedOn = modifiedOn;
     }
 
-    public UUID getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(UUID modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
@@ -126,11 +136,11 @@ public class MenuItem {
         this.deletedOn = deletedOn;
     }
 
-    public UUID getDeletedBy() {
+    public Long getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeletedBy(UUID deletedBy) {
+    public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
     }
 }
