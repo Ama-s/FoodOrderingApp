@@ -1,6 +1,9 @@
 package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Orders")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Orders {
 
     @Id
@@ -50,6 +54,9 @@ public class Orders {
 
     @Column(name = "modified_by")
     private Long modifiedBy;
+
+    @Column(name = "is_favourite")
+    private Boolean isFavourite ;
 
     // Getters and Setters
     public Long getId() {
@@ -133,4 +140,11 @@ public class Orders {
         this.invoice = invoice;
     }
 
+    public Boolean getIsFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(Boolean isFavourite) {
+        this.isFavourite = isFavourite;
+    }
 }

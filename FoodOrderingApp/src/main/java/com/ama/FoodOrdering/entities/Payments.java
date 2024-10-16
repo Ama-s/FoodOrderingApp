@@ -2,6 +2,8 @@ package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.PaymentStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDate;
 
 @Entity
@@ -29,8 +31,8 @@ public class Payments {
         return id;
     }
 
-    public void setId(Long paymentId) {
-        this.id = paymentId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Invoice getInvoice() {

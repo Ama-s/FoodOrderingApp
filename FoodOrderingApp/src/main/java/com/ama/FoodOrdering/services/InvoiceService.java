@@ -1,13 +1,16 @@
 package com.ama.FoodOrdering.services;
 import com.ama.FoodOrdering.entities.Invoice;
-import jakarta.persistence.criteria.Order;
+import com.ama.FoodOrdering.entities.Orders;
+import org.springframework.data.crossstore.ChangeSetPersister;
+
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 public interface InvoiceService {
 
-    public Invoice generateInvoice(Order order);
+    public Invoice generateInvoice(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException;
 
-    public void sendInvoice(Invoice invoice);
+    public Invoice getInvoice(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException;
 
-    public List<Invoice> getInvoicesByUser(UUID user_id);
+    public Set<Invoice> getAllInvoice(Long user_id) throws ChangeSetPersister.NotFoundException;
 }

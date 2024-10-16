@@ -1,5 +1,9 @@
 package com.ama.FoodOrdering.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -9,14 +13,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // to specify how the primary key should be generated
-
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
+    // to specify how the primary key should be generated
+
 
     @Column(name = "name", length = 100)
     private String name;
@@ -32,9 +37,6 @@ public class Users {
 
     @Column(name = "created_on")
     private LocalDateTime createdOn;
-
-    @Column(name = "created_by")
-    private Long createdBy;
 
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
@@ -63,7 +65,7 @@ public class Users {
     // deleted from the database.
     // it reflects the one-to-many relationship. E.g. the list can contain the number of orders Deborah has
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Invoice> invoices;
 
     // Getters and Setters
@@ -107,20 +109,16 @@ public class Users {
         this.role = role;
     }
 
+    public List<Orders> getOrders() {
+        return orders;
+    }
+
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
     public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
     }
 
     public LocalDateTime getModifiedOn() {
@@ -153,5 +151,9 @@ public class Users {
 
     public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+
+    public Set<Invoice> getInvoices(){
+        return invoices;
     }
 }

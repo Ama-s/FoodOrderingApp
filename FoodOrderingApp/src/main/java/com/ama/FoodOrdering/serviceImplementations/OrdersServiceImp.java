@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -54,39 +55,60 @@ public class OrdersServiceImp implements OrdersService {
         newOrder.setOrderDate(LocalDate.now());
         newOrder.setDueDate(LocalDate.now().plusDays(30));
         newOrder.setStatus(OrderStatus.RECEIVED);
-
         // this is where I'm supposed to save the generated invoice to the order
 
         return ordersRepository.save(newOrder);
     }
 
     @Override
-    public OrderItem addOrderItem() {
-        return null;
+    public void deleteOrder(Long order_id, Long user_id) {
+        try {
+            Users user = usersRepository.findById(user_id)
+                    .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+            Orders order = ordersRepository.findById(order_id)
+                    .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+            if (order.getStatus() == OrderStatus.RECEIVED) {
+                ordersRepository.deleteById(order_id);
+                System.out.println("Order deleted successfully.");
+            } else {
+                System.out.println("Your order has already been confirmed or processed, it cannot be deleted.");
+            }
+        } catch (ChangeSetPersister.NotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred while trying to delete the order: " + e.getMessage());
+        }
     }
 
     @Override
-    public void deleteOrder() {
+    public List<Orders> getAllOrderHistory(Long admin_id) throws AccessDeniedException {
+        Users user = usersRepository.findById(admin_id).orElseThrow();
+        if (!"admin".equals(user.getRole())) {
+            throw new AccessDeniedException("User is not authorized to perform this action");
+        }
 
+        return ordersRepository.findAll();
     }
 
     @Override
-    public List<Orders> getOrderHistory() {
-        return List.of();
+    public Orders markFavourite(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException {
+        Users user = usersRepository.findById(user_id)
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+        Orders favouriteOrder = ordersRepository.findById(order_id)
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+        favouriteOrder.setIsFavourite(true);
+
+        return ordersRepository.save(favouriteOrder);
     }
 
     @Override
-    public OrderItem markFavourite() {
-        return null;
-    }
-
-    @Override
-    public int getTotalQuantityOrdered() {
-        return 0;
-    }
-
-    @Override
-    public Orders viewPastOrdersByUser(UUID user_id) {
-        return null;
+    public List<Orders> viewPastOrdersByUser(Long user_id) {
+        Users user = usersRepository.findById(user_id).orElseThrow();
+        List<Orders> pastOrdersByUser = user.getOrders();
+        return pastOrdersByUser;
     }
 }

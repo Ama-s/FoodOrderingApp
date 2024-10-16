@@ -2,6 +2,9 @@ package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.InvoiceStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -32,23 +35,19 @@ public class Invoice {
     @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'DRAFT'")
     private InvoiceStatus status;
 
+    @CreationTimestamp
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
     @Column(name = "created_by")
     private Long createdBy;
 
+    @UpdateTimestamp
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @Column(name = "modified_by")
     private Long modifiedBy;
-
-    @Column(name = "deleted_on")
-    private LocalDateTime deletedOn;
-
-    @Column(name = "deleted_by")
-    private Long deletedBy;
 
     // Getters and Setters
     public Long getId() {
@@ -105,22 +104,6 @@ public class Invoice {
 
     public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
-    }
-
-    public LocalDateTime getDeletedOn() {
-        return deletedOn;
-    }
-
-    public void setDeletedOn(LocalDateTime deletedOn) {
-        this.deletedOn = deletedOn;
-    }
-
-    public Long getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
     }
 
     public Users getUser() {

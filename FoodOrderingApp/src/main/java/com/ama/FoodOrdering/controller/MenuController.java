@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/menu")
@@ -27,7 +29,7 @@ public class MenuController {
         try {
             MenuItem newMenuItem = menuService.addMenuItem(menuItem, admin_id);
             return new ResponseEntity<>(newMenuItem, HttpStatus.CREATED);
-        } catch (ChangeSetPersister.NotFoundException e) {
+        } catch (ChangeSetPersister.NotFoundException | AccessDeniedException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -37,9 +39,20 @@ public class MenuController {
     }
 
     @DeleteMapping("/delete/{id}/{admin_id}")
-    public ResponseEntity<Void> deleteMenuItem(@PathVariable("id") Long id, @PathVariable("admin_id") Long admin_id) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<Void> deleteMenuItem(@PathVariable("id") Long id, @PathVariable("admin_id") Long admin_id) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
         menuService.deleteMenuItem(id, admin_id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/update/{menu_id}/{admin_id}")
+    public ResponseEntity<MenuItem> updateMenuItem(@PathVariable Long menu_id, @PathVariable Long admin_id,
+                                                   @RequestBody Map<String, Object> updates) {
+        try {
+            MenuItem updatedMenuItem = menuService.updateMenuItem(menu_id, admin_id,updates);
+            return new ResponseEntity<>(updatedMenuItem, HttpStatus.OK);
+        } catch (ChangeSetPersister.NotFoundException | AccessDeniedException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/addMenu/{admin_id}")
@@ -47,22 +60,20 @@ public class MenuController {
         try {
             List<MenuItem> newMenuItems = menuService.addMenu(menuItems, admin_id);
             return new ResponseEntity<>(newMenuItems, HttpStatus.CREATED);
-        } catch (ChangeSetPersister.NotFoundException e) {
+        } catch (ChangeSetPersister.NotFoundException | AccessDeniedException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/dailyMenu")
-    public ResponseEntity<List<MenuItem>> showDailyMenu() {
-        List<MenuItem> newDailyMenu = menuService.showDailyMenu();
+    @GetMapping("/dailyMenu/{user_id}")
+    public ResponseEntity<List<MenuItem>> showDailyMenu(@PathVariable("user_id") Long user_id) {
+        List<MenuItem> newDailyMenu = menuService.showDailyMenu(user_id);
         return new ResponseEntity<List<MenuItem>>(newDailyMenu, HttpStatus.OK);
     }
 
-    @GetMapping("/getDailySuggestion")
-    public ResponseEntity<MenuItem> getDailySuggestion() {
-        MenuItem newDailySuggestion = menuService.getDailySuggestion();
+    @GetMapping("/dailySuggestion/{user_id}")
+    public ResponseEntity<MenuItem> getDailySuggestion(@PathVariable("user_id") Long user_id) {
+        MenuItem newDailySuggestion = menuService.getDailySuggestion(user_id);
         return new ResponseEntity<MenuItem>(newDailySuggestion, HttpStatus.OK);
     }
-
-    // might have to add @PutMapping to update or make changes to existing MenuItems or Menu, that is where I'll implement modifiedOn and modifiedBy
 }

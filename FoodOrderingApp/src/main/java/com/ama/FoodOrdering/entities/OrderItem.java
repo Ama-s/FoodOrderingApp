@@ -58,5 +58,4 @@ public class OrderItem {
     public void setQuantity(Short quantity) {
         this.quantity = quantity;
     }
-
 }
