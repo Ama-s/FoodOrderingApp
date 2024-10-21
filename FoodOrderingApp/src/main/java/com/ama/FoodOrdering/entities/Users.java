@@ -1,5 +1,9 @@
 package com.ama.FoodOrdering.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -9,14 +13,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private Long id;
     // to specify how the primary key should be generated
 
-    @Column(name = "id", unique = true, nullable = false)
-    private UUID id;
 
     @Column(name = "name", length = 100)
     private String name;
@@ -33,23 +38,22 @@ public class Users {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
-    @Column(name = "created_by")
-    private UUID createdBy;
-
     @Column(name = "modified_on")
     private LocalDateTime modifiedOn;
 
     @Column(name = "modified_by")
-    private UUID modifiedBy;
+    private Long modifiedBy;
 
     @Column(name = "deleted_on")
     private LocalDateTime deletedOn;
 
     @Column(name = "deleted_by")
-    private UUID deletedBy;
+    private Long deletedBy;
 
     // OneToMany relationship with Orders
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Orders> orders;
+    // parent entity
     // "user" specifies the column/field in the Orders class that owns the relationship
     // For example In the Orders class, there would be a field like private Users user;
 
@@ -59,19 +63,17 @@ public class Users {
 
     // When orphanRemoval is set to true, any Orders entity that is removed from the orders list in Users will also be
     // deleted from the database.
-    private List<Orders> orders;
-    // it reflects the one-to-many relationship. E.g the list can contain the number of orders Deborah has
+    // it reflects the one-to-many relationship. E.g. the list can contain the number of orders Deborah has
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Invoice> invoices;
 
-
     // Getters and Setters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -107,20 +109,16 @@ public class Users {
         this.role = role;
     }
 
+    public List<Orders> getOrders() {
+        return orders;
+    }
+
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
     public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public UUID getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(UUID createdBy) {
-        this.createdBy = createdBy;
     }
 
     public LocalDateTime getModifiedOn() {
@@ -131,11 +129,11 @@ public class Users {
         this.modifiedOn = modifiedOn;
     }
 
-    public UUID getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(UUID modifiedBy) {
+    public void setModifiedBy(Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
@@ -147,11 +145,15 @@ public class Users {
         this.deletedOn = deletedOn;
     }
 
-    public UUID getDeletedBy() {
+    public Long getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeletedBy(UUID deletedBy) {
+    public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+
+    public Set<Invoice> getInvoices(){
+        return invoices;
     }
 }
