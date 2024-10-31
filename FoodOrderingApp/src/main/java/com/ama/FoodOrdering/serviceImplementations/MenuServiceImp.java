@@ -68,6 +68,7 @@ public class MenuServiceImp implements MenuService {
     public MenuItem updateMenuItem(Long menu_id, Long admin_id, Map<String, Object> updates) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
         User user = userRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         if (user.getRole() != UserRole.ADMIN) {
+
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
 
@@ -95,6 +96,7 @@ public class MenuServiceImp implements MenuService {
     public List<MenuItem> showDailyMenu(Long user_id) {
         // using the repository's findAll method for showDailyMenu
         return menuItemRepository.findByDeletedOnIsNull();
+
     }
 
     @Override

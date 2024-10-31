@@ -1,7 +1,6 @@
 package com.ama.FoodOrdering.services;
 import com.ama.FoodOrdering.entities.Invoice;
 import org.springframework.data.crossstore.ChangeSetPersister;
-
 import java.util.Set;
 
 public interface InvoiceService {

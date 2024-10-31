@@ -1,5 +1,4 @@
 package com.ama.FoodOrdering.controller;
-
 import com.ama.FoodOrdering.entities.Payment;
 import com.ama.FoodOrdering.responses.PaymentResponse;
 import com.ama.FoodOrdering.services.PaymentService;

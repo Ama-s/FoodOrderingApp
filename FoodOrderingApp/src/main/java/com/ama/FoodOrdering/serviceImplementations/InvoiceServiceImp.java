@@ -64,6 +64,7 @@ public class InvoiceServiceImp implements InvoiceService {
 
         // Find the order by ID
         Order order = orderRepository.findById(order_id)
+
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         // Find the invoice by order and user
@@ -75,6 +76,7 @@ public class InvoiceServiceImp implements InvoiceService {
     @Override
     public Set<Invoice> getAllInvoice(Long user_id) throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
         return invoiceRepository.findByUser(user);
     }
 }

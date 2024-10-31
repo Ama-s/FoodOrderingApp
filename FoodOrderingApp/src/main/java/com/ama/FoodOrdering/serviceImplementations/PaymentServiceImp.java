@@ -73,6 +73,7 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public Integer getTotalOverdue(Long user_id) throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findById(user_id)
+
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         Set<Invoice> userInvoices = user.getInvoices();
 
@@ -106,6 +107,7 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public List<PaymentResponse> getMonthlyBillByUser(Long user_id) throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findById(user_id)
+
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         // Assuming you have a method to filter payments within a specific month

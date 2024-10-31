@@ -51,6 +51,27 @@ public class Invoice {
 
     private PaymentStatus payment_status;
 
+    @Column(name = "total_amount")
+    private Integer totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'DRAFT'")
+    private InvoiceStatus status;
+
+    @CreationTimestamp
+    @Column(name = "created_on")
+    private LocalDateTime createdOn;
+
+    @Column(name = "created_by")
+    private Long createdBy;
+
+    @UpdateTimestamp
+    @Column(name = "modified_on")
+    private LocalDateTime modifiedOn;
+
+    @Column(name = "modified_by")
+    private Long modifiedBy;
+
     // Getters and Setters
     public Long getId() {
         return id;

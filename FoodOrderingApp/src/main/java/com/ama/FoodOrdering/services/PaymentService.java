@@ -3,7 +3,6 @@ package com.ama.FoodOrdering.services;
 import com.ama.FoodOrdering.entities.Payment;
 import com.ama.FoodOrdering.responses.PaymentResponse;
 import org.springframework.data.crossstore.ChangeSetPersister;
-
 import java.util.List;
 
 public interface PaymentService {

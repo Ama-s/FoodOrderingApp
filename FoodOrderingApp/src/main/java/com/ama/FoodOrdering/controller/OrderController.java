@@ -35,6 +35,7 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable("order_id") Long order_id,
                                             @PathVariable("user_id") Long user_id) {
         orderService.deleteOrder(order_id, user_id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
