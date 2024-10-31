@@ -2,12 +2,13 @@ package com.ama.FoodOrdering.serviceImplementations;
 
 import com.ama.FoodOrdering.entities.Invoice;
 import com.ama.FoodOrdering.entities.OrderItem;
-import com.ama.FoodOrdering.entities.Orders;
-import com.ama.FoodOrdering.entities.Users;
+import com.ama.FoodOrdering.entities.Order;
+import com.ama.FoodOrdering.entities.User;
 import com.ama.FoodOrdering.enums.InvoiceStatus;
+import com.ama.FoodOrdering.enums.PaymentStatus;
 import com.ama.FoodOrdering.repos.InvoiceRepository;
-import com.ama.FoodOrdering.repos.OrdersRepository;
-import com.ama.FoodOrdering.repos.UsersRepository;
+import com.ama.FoodOrdering.repos.OrderRepository;
+import com.ama.FoodOrdering.repos.UserRepository;
 import com.ama.FoodOrdering.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -23,15 +24,15 @@ public class InvoiceServiceImp implements InvoiceService {
     private InvoiceRepository invoiceRepository;
 
     @Autowired
-    private OrdersRepository ordersRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Override
     public Invoice generateInvoice(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException {
-        Users user = usersRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        Orders order = ordersRepository.findById(order_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        User user = userRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        Order order = orderRepository.findById(order_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         Invoice invoice = new Invoice();
         invoice.setStatus(InvoiceStatus.DRAFT);
@@ -48,6 +49,7 @@ public class InvoiceServiceImp implements InvoiceService {
         }
         invoice.setTotalAmount(total_amount);
         invoice.setStatus(InvoiceStatus.ISSUED);
+        invoice.setPaymentStatus(PaymentStatus.NOT_PAID);
         invoice.setCreatedBy(user_id);
 
         order.setInvoice(invoice);
@@ -57,11 +59,11 @@ public class InvoiceServiceImp implements InvoiceService {
     @Override
     public Invoice getInvoice(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException {
         // Find the user by ID
-        Users user = usersRepository.findById(user_id)
+        User user = userRepository.findById(user_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         // Find the order by ID
-        Orders order = ordersRepository.findById(order_id)
+        Order order = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         // Find the invoice by order and user
@@ -72,7 +74,7 @@ public class InvoiceServiceImp implements InvoiceService {
 
     @Override
     public Set<Invoice> getAllInvoice(Long user_id) throws ChangeSetPersister.NotFoundException {
-        Users user = usersRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        User user = userRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         return invoiceRepository.findByUser(user);
     }
 }

@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MenuItemRepository extends JpaRepository <MenuItem, Long> {
-    // query to get daily menu
-    List<MenuItem> findAll(); // this will return all MenuItem objects from the database
 
     // a custom query is created to select a random menu item.
     @Query(value = "SELECT * FROM menu_item ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
@@ -18,4 +16,8 @@ public interface MenuItemRepository extends JpaRepository <MenuItem, Long> {
 
     // Method to delete a menu item by its id
     void deleteById(Long menu_id);
+
+    // query to get daily menu
+    // this will return all MenuItem objects that haven't been deleted yet from the database
+    List<MenuItem> findByDeletedOnIsNull();
 }

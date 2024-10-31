@@ -1,9 +1,10 @@
 package com.ama.FoodOrdering.serviceImplementations;
 
 import com.ama.FoodOrdering.entities.MenuItem;
-import com.ama.FoodOrdering.entities.Users;
+import com.ama.FoodOrdering.entities.User;
+import com.ama.FoodOrdering.enums.UserRole;
 import com.ama.FoodOrdering.repos.MenuItemRepository;
-import com.ama.FoodOrdering.repos.UsersRepository;
+import com.ama.FoodOrdering.repos.UserRepository;
 import com.ama.FoodOrdering.services.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -12,12 +13,10 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.nio.file.AccessDeniedException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class MenuServiceImp implements MenuService {
@@ -26,12 +25,12 @@ public class MenuServiceImp implements MenuService {
     private MenuItemRepository menuItemRepository;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Override
     public MenuItem addMenuItem(MenuItem menuItem, Long admin_id) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
-        Users user = usersRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        if (!"admin".equals(user.getRole())) {
+        User user = userRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        if (user.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
         menuItem.setCreatedBy(admin_id);
@@ -43,8 +42,8 @@ public class MenuServiceImp implements MenuService {
         MenuItem menuItem = menuItemRepository.findById(id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         menuItem.setDeletedOn(LocalDateTime.now());
 
-        Users user = usersRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        if (!"admin".equals(user.getRole())) {
+        User user = userRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        if (user.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
         menuItem.setDeletedBy(admin_id);
@@ -55,8 +54,8 @@ public class MenuServiceImp implements MenuService {
     @Override
     public List<MenuItem> addMenu(List<MenuItem> menuItems, Long admin_id) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
 
-        Users user = usersRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        if (!"admin".equals(user.getRole())) {
+        User user = userRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        if (user.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
         for (MenuItem menuItem : menuItems) {
@@ -67,8 +66,8 @@ public class MenuServiceImp implements MenuService {
 
     @Override
     public MenuItem updateMenuItem(Long menu_id, Long admin_id, Map<String, Object> updates) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
-        Users user = usersRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        if (!"admin".equals(user.getRole())) {
+        User user = userRepository.findById(admin_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        if (user.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
 
@@ -95,7 +94,7 @@ public class MenuServiceImp implements MenuService {
     @Override
     public List<MenuItem> showDailyMenu(Long user_id) {
         // using the repository's findAll method for showDailyMenu
-        return menuItemRepository.findAll();
+        return menuItemRepository.findByDeletedOnIsNull();
     }
 
     @Override

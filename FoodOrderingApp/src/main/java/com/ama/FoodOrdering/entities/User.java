@@ -1,20 +1,18 @@
 package com.ama.FoodOrdering.entities;
 
+import com.ama.FoodOrdering.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.Set;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +30,9 @@ public class Users {
     @Column(name = "password", length = 20)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", length = 20)
-    private String role;
+    private UserRole role;
 
     @Column(name = "created_on")
     private LocalDateTime createdOn;
@@ -52,7 +51,7 @@ public class Users {
 
     // OneToMany relationship with Orders
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Orders> orders;
+    private List<Order> orders;
     // parent entity
     // "user" specifies the column/field in the Orders class that owns the relationship
     // For example In the Orders class, there would be a field like private Users user;
@@ -101,15 +100,15 @@ public class Users {
         this.password = password;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
-    public List<Orders> getOrders() {
+    public List<Order> getOrders() {
         return orders;
     }
 

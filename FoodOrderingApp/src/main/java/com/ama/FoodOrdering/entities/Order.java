@@ -1,11 +1,9 @@
 package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.OrderStatus;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
@@ -15,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "Orders")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Orders {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +24,7 @@ public class Orders {
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     //child entity
     //indicates which column in the Orders table references the primary key of the Users table
-    private Users user;
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
@@ -67,11 +65,11 @@ public class Orders {
         this.id = id;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

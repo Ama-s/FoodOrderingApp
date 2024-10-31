@@ -2,13 +2,12 @@ package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.PaymentStatus;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Payments")
-public class Payments {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

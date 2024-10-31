@@ -1,12 +1,12 @@
 package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.InvoiceStatus;
+import com.ama.FoodOrdering.enums.PaymentStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "Invoice")
@@ -19,14 +19,14 @@ public class Invoice {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users user;
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Orders order;
+    private Order order;
 
     @OneToOne(mappedBy = "invoice")
-    private Payments payment;
+    private Payment payment;
 
     @Column(name = "total_amount")
     private Integer totalAmount;
@@ -48,6 +48,8 @@ public class Invoice {
 
     @Column(name = "modified_by")
     private Long modifiedBy;
+
+    private PaymentStatus payment_status;
 
     // Getters and Setters
     public Long getId() {
@@ -106,27 +108,35 @@ public class Invoice {
         this.modifiedBy = modifiedBy;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public Orders getOrder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrder(Orders order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 
-    public Payments getPayment() {
+    public Payment getPayment() {
         return payment;
     }
 
-    public void setPayment(Payments payment) {
+    public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return payment_status;
+    }
+
+    public void setPaymentStatus(PaymentStatus payment_status) {
+        this.payment_status = payment_status;
     }
 }
