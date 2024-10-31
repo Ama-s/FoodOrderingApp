@@ -1,8 +1,6 @@
 package com.ama.FoodOrdering.entities;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "OrderItem")
@@ -16,7 +14,7 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false, referencedColumnName = "id")
     //indicates which column in the OrderItem table references the primary key of the Orders table
-    private Orders order;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "menu_item_id", nullable = false, referencedColumnName = "id")
@@ -35,11 +33,11 @@ public class OrderItem {
         this.id = id;
     }
 
-    public Orders getOrder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrder(Orders order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 

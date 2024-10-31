@@ -1,13 +1,12 @@
 package com.ama.FoodOrdering.services;
 
-import com.ama.FoodOrdering.entities.Payments;
+import com.ama.FoodOrdering.entities.Payment;
+import com.ama.FoodOrdering.responses.PaymentResponse;
 import org.springframework.data.crossstore.ChangeSetPersister;
-
 import java.util.List;
-import java.util.UUID;
 
 public interface PaymentService {
-    public Payments makePayment(Long invoice_id) throws ChangeSetPersister.NotFoundException;
+    public Payment makePayment(Long invoice_id) throws ChangeSetPersister.NotFoundException;
 
     public Integer getTotalPaid(Long user_id) throws ChangeSetPersister.NotFoundException;
 
@@ -15,7 +14,7 @@ public interface PaymentService {
 
     public Integer getTotalOverdue(Long user_id) throws ChangeSetPersister.NotFoundException;
 
-    public List<Payments> getAccountSummary(Long user_id) throws ChangeSetPersister.NotFoundException;
+    public List<PaymentResponse> getAccountSummary(Long user_id) throws ChangeSetPersister.NotFoundException;
 
-    public List<Payments> getMonthlyBillByUser(Long user_id) throws ChangeSetPersister.NotFoundException;
+    public List<PaymentResponse> getMonthlyBillByUser(Long user_id) throws ChangeSetPersister.NotFoundException;
 }
