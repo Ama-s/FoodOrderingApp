@@ -41,6 +41,7 @@ public class OrderServiceImp implements OrderService {
     public Order placeOrder(List<OrderItem> orderItems) throws ChangeSetPersister.NotFoundException {
         Order newOrder = new Order();
         User user = userRepository.findById(authService.getCurrentUserId())
+
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         for (OrderItem orderItem : orderItems) {
@@ -58,6 +59,7 @@ public class OrderServiceImp implements OrderService {
         newOrder.setUser(user);
         newOrder.setCreatedBy(authService.getCurrentUserId());
 
+
         newOrder.setOrderDate(LocalDate.now());
         newOrder.setDueDate(LocalDate.now().plusDays(30));
         newOrder.setStatus(OrderStatus.RECEIVED);
@@ -71,6 +73,7 @@ public class OrderServiceImp implements OrderService {
     public void deleteOrder(Long order_id) {
         try {
             User user = userRepository.findById(authService.getCurrentUserId())
+
                     .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
             Order order = orderRepository.findById(order_id)
@@ -125,6 +128,7 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     public Order markFavourite(Long order_id) throws ChangeSetPersister.NotFoundException {
+
         Order favouriteOrder = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 

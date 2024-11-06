@@ -27,13 +27,13 @@ public class MenuServiceImp implements MenuService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AuthService authService;
 
     @Override
     public MenuItem addMenuItem(MenuItem menuItem) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
         User user = userRepository.findById(authService.getCurrentUserId()).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
         if (user.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }

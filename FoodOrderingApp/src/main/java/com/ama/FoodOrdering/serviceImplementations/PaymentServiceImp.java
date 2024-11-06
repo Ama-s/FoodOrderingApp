@@ -63,6 +63,7 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public Integer getTotalOwed() throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findById(authService.getCurrentUserId()).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
         Set<Invoice> userInvoices = user.getInvoices();
 
         Integer totalOwed = 0;
@@ -93,6 +94,7 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public List<PaymentResponse> getAccountSummary() throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findById(authService.getCurrentUserId())
+
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         List<Payment> payments = paymentRepository.findByUser(user);
 
@@ -107,4 +109,5 @@ public class PaymentServiceImp implements PaymentService {
                     payment.getStatus())
         ).collect(Collectors.toList());
     }
+
 }

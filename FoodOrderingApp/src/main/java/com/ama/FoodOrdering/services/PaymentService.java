@@ -15,4 +15,5 @@ public interface PaymentService {
     public Integer getTotalOverdue() throws ChangeSetPersister.NotFoundException;
 
     public List<PaymentResponse> getAccountSummary() throws ChangeSetPersister.NotFoundException;
+
 }

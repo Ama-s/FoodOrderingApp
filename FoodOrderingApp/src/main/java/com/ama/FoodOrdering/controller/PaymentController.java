@@ -69,6 +69,7 @@ public class PaymentController {
         try {
             List<PaymentResponse> paymentResponses = paymentService.getAccountSummary();
             return new ResponseEntity<>(paymentResponses, HttpStatus.OK);
+
         } catch (ChangeSetPersister.NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {

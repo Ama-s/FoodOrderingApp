@@ -26,7 +26,6 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-
     @PatchMapping("/updateUserDetails")
     public ResponseEntity<UserResponse> updateUser(@RequestBody Map<String, Object> updates){
         try{
