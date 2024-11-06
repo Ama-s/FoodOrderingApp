@@ -6,7 +6,7 @@ import com.ama.FoodOrdering.enums.OrderStatus;
 import com.ama.FoodOrdering.repos.InvoiceRepository;
 import com.ama.FoodOrdering.repos.MenuItemRepository;
 import com.ama.FoodOrdering.repos.OrdersRepository;
-import com.ama.FoodOrdering.repos.UsersRepository;
+import com.ama.FoodOrdering.repos.UserRepository;
 import com.ama.FoodOrdering.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class OrdersServiceImp implements OrdersService {
@@ -24,7 +23,7 @@ public class OrdersServiceImp implements OrdersService {
     private OrdersRepository ordersRepository;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository usersRepository;
 
     @Autowired
     private MenuItemRepository menuItemRepository;
@@ -32,9 +31,9 @@ public class OrdersServiceImp implements OrdersService {
     private InvoiceRepository invoiceRepository;
 
     @Override
-    public Orders placeOrder(List<OrderItem> orderItems, Long user_id) throws ChangeSetPersister.NotFoundException {
-        Orders newOrder = new Orders();
-        Users user = usersRepository.findById(user_id)
+    public Order placeOrder(List<OrderItem> orderItems, Long user_id) throws ChangeSetPersister.NotFoundException {
+        Order newOrder = new Order();
+        User user = usersRepository.findById(user_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         for (OrderItem orderItem : orderItems) {
@@ -63,10 +62,10 @@ public class OrdersServiceImp implements OrdersService {
     @Override
     public void deleteOrder(Long order_id, Long user_id) {
         try {
-            Users user = usersRepository.findById(user_id)
+            User user = usersRepository.findById(user_id)
                     .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
-            Orders order = ordersRepository.findById(order_id)
+            Order order = ordersRepository.findById(order_id)
                     .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
             if (order.getStatus() == OrderStatus.RECEIVED) {
@@ -83,8 +82,8 @@ public class OrdersServiceImp implements OrdersService {
     }
 
     @Override
-    public List<Orders> getAllOrderHistory(Long admin_id) throws AccessDeniedException {
-        Users user = usersRepository.findById(admin_id).orElseThrow();
+    public List<Order> getAllOrderHistory(Long admin_id) throws AccessDeniedException {
+        User user = usersRepository.findById(admin_id).orElseThrow();
         if (!"admin".equals(user.getRole())) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
@@ -93,11 +92,11 @@ public class OrdersServiceImp implements OrdersService {
     }
 
     @Override
-    public Orders markFavourite(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException {
-        Users user = usersRepository.findById(user_id)
+    public Order markFavourite(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException {
+        User user = usersRepository.findById(user_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
-        Orders favouriteOrder = ordersRepository.findById(order_id)
+        Order favouriteOrder = ordersRepository.findById(order_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         favouriteOrder.setIsFavourite(true);
@@ -106,9 +105,9 @@ public class OrdersServiceImp implements OrdersService {
     }
 
     @Override
-    public List<Orders> viewPastOrdersByUser(Long user_id) {
-        Users user = usersRepository.findById(user_id).orElseThrow();
-        List<Orders> pastOrdersByUser = user.getOrders();
+    public List<Order> viewPastOrdersByUser(Long user_id) {
+        User user = usersRepository.findById(user_id).orElseThrow();
+        List<Order> pastOrdersByUser = user.getOrders();
         return pastOrdersByUser;
     }
 }

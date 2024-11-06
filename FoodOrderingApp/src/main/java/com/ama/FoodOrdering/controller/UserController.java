@@ -1,5 +1,6 @@
 package com.ama.FoodOrdering.controller;
 
+import com.ama.FoodOrdering.auth.security.LoginRequest;
 import com.ama.FoodOrdering.entities.User;
 import com.ama.FoodOrdering.exceptions.ResourceNotFoundException;
 import com.ama.FoodOrdering.responses.UserResponse;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +29,7 @@ public class UserController {
         User newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
 
     @PatchMapping("/update/{user_id}")
     public ResponseEntity<UserResponse> updateUser(@RequestBody Map<String, Object> updates,

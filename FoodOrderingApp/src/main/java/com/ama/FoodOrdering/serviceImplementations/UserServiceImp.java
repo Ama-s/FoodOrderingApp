@@ -93,4 +93,10 @@ public class UserServiceImp implements UserService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public User findByName(String name) {
+        // Implement this in your service to find a user by `name`
+        return userRepository.findByName(name);  // Assuming your repository has this method
+    }
+
 }
