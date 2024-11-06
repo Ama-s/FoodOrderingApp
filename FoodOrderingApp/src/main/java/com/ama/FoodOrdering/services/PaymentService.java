@@ -8,13 +8,11 @@ import java.util.List;
 public interface PaymentService {
     public Payment makePayment(Long invoice_id) throws ChangeSetPersister.NotFoundException;
 
-    public Integer getTotalPaid(Long user_id) throws ChangeSetPersister.NotFoundException;
+    public Integer getTotalPaid() throws ChangeSetPersister.NotFoundException;
 
-    public Integer getTotalOwed(Long user_id) throws ChangeSetPersister.NotFoundException;
+    public Integer getTotalOwed() throws ChangeSetPersister.NotFoundException;
 
-    public Integer getTotalOverdue(Long user_id) throws ChangeSetPersister.NotFoundException;
+    public Integer getTotalOverdue() throws ChangeSetPersister.NotFoundException;
 
-    public List<PaymentResponse> getAccountSummary(Long user_id) throws ChangeSetPersister.NotFoundException;
-
-    public List<PaymentResponse> getMonthlyBillByUser(Long user_id) throws ChangeSetPersister.NotFoundException;
+    public List<PaymentResponse> getAccountSummary() throws ChangeSetPersister.NotFoundException;
 }

@@ -18,10 +18,9 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @PostMapping("/generate/{order_id}/{user_id}")
-    public ResponseEntity<InvoiceResponse> generateInvoice(@PathVariable("order_id") Long order_id,
-                                                           @PathVariable("user_id") Long user_id) throws NotFoundException {
-        Invoice invoice = invoiceService.generateInvoice(order_id, user_id);
+    @PostMapping("/generate")
+    public ResponseEntity<InvoiceResponse> generateInvoice(@RequestParam("order_id") Long order_id) throws NotFoundException {
+        Invoice invoice = invoiceService.generateInvoice(order_id);
 
         InvoiceResponse response = new InvoiceResponse(
                 invoice.getId(),
@@ -33,10 +32,9 @@ public class InvoiceController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/showInvoice/{order_id}/{user_id}")
-    public ResponseEntity<InvoiceResponse> getInvoice(@PathVariable("order_id") Long order_id,
-                                              @PathVariable("user_id") Long user_id) throws NotFoundException {
-        Invoice invoice = invoiceService.getInvoice(order_id, user_id);
+    @GetMapping("/showInvoice")
+    public ResponseEntity<InvoiceResponse> getInvoice(@RequestParam("order_id") Long order_id) throws NotFoundException {
+        Invoice invoice = invoiceService.getInvoice(order_id);
 
         InvoiceResponse response = new InvoiceResponse(
                 invoice.getId(),
@@ -48,9 +46,9 @@ public class InvoiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/showAll/{user_id}")
-    public ResponseEntity<Set<InvoiceResponse>> getAllInvoice(@PathVariable("user_id") Long user_id) throws NotFoundException {
-        Set<Invoice> allInvoice = invoiceService.getAllInvoice(user_id);
+    @GetMapping("/showAll")
+    public ResponseEntity<Set<InvoiceResponse>> getAllInvoice() throws NotFoundException {
+        Set<Invoice> allInvoice = invoiceService.getAllInvoice();
 
         Set<InvoiceResponse> responseSet = allInvoice.stream()
                 .map(invoice -> new InvoiceResponse(

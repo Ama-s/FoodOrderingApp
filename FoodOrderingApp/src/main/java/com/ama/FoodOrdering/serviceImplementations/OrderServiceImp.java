@@ -9,6 +9,7 @@ import com.ama.FoodOrdering.repos.MenuItemRepository;
 import com.ama.FoodOrdering.repos.OrderRepository;
 import com.ama.FoodOrdering.repos.UserRepository;
 import com.ama.FoodOrdering.responses.OrderResponse;
+import com.ama.FoodOrdering.services.AuthService;
 import com.ama.FoodOrdering.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -33,10 +34,13 @@ public class OrderServiceImp implements OrderService {
 
     private InvoiceRepository invoiceRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @Override
-    public Order placeOrder(List<OrderItem> orderItems, Long user_id) throws ChangeSetPersister.NotFoundException {
+    public Order placeOrder(List<OrderItem> orderItems) throws ChangeSetPersister.NotFoundException {
         Order newOrder = new Order();
-        User user = userRepository.findById(user_id)
+        User user = userRepository.findById(authService.getCurrentUserId())
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         for (OrderItem orderItem : orderItems) {
@@ -52,7 +56,7 @@ public class OrderServiceImp implements OrderService {
 
         newOrder.setOrderItems(orderItems);
         newOrder.setUser(user);
-        newOrder.setCreatedBy(user_id);
+        newOrder.setCreatedBy(authService.getCurrentUserId());
 
         newOrder.setOrderDate(LocalDate.now());
         newOrder.setDueDate(LocalDate.now().plusDays(30));
@@ -64,9 +68,9 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
-    public void deleteOrder(Long order_id, Long user_id) {
+    public void deleteOrder(Long order_id) {
         try {
-            User user = userRepository.findById(user_id)
+            User user = userRepository.findById(authService.getCurrentUserId())
                     .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
             Order order = orderRepository.findById(order_id)
@@ -86,8 +90,8 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> getAllOrderHistory(Long admin_id) throws AccessDeniedException {
-        User user = userRepository.findById(admin_id).orElseThrow();
+    public List<OrderResponse> getAllOrderHistory() throws AccessDeniedException {
+        User user = userRepository.findById(authService.getCurrentUserId()).orElseThrow();
         if (user.getRole() != UserRole.ADMIN) {
             throw new AccessDeniedException("User is not authorized to perform this action");
         }
@@ -120,10 +124,7 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
-    public Order markFavourite(Long order_id, Long user_id) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-
+    public Order markFavourite(Long order_id) throws ChangeSetPersister.NotFoundException {
         Order favouriteOrder = orderRepository.findById(order_id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
@@ -133,8 +134,8 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> viewPastOrdersByUser(Long user_id) {
-        User user = userRepository.findById(user_id).orElseThrow();
+    public List<OrderResponse> viewPastOrdersByUser() {
+        User user = userRepository.findById(authService.getCurrentUserId()).orElseThrow();
         List<Order> pastOrdersByUser = user.getOrders();
 
         // Map Orders to OrderResponse

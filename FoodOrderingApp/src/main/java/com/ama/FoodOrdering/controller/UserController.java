@@ -1,6 +1,5 @@
 package com.ama.FoodOrdering.controller;
 
-import com.ama.FoodOrdering.auth.security.LoginRequest;
 import com.ama.FoodOrdering.entities.User;
 import com.ama.FoodOrdering.exceptions.ResourceNotFoundException;
 import com.ama.FoodOrdering.responses.UserResponse;
@@ -9,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,11 +27,10 @@ public class UserController {
     }
 
 
-    @PatchMapping("/update/{user_id}")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody Map<String, Object> updates,
-                                                   @PathVariable Long user_id){
+    @PatchMapping("/updateUserDetails")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody Map<String, Object> updates){
         try{
-            User updatedUser = userService.updateUser(user_id, updates);
+            User updatedUser = userService.updateUser(updates);
             UserResponse response = new UserResponse(
                     updatedUser.getId(),
                     updatedUser.getName(),
@@ -51,10 +46,10 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{user_id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long user_id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser() {
         try {
-            userService.deleteUser(user_id);
+            userService.deleteUser();
             return ResponseEntity.noContent().build(); // 204 No Content when deletion is successful
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage()); // Return custom error message
@@ -64,9 +59,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/getUser/{user_id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long user_id) throws ChangeSetPersister.NotFoundException {
-        UserResponse userResponse = userService.getUserById(user_id);
+    @GetMapping("/getMyDetails")
+    public ResponseEntity<UserResponse> getUserById() throws ChangeSetPersister.NotFoundException {
+        UserResponse userResponse = userService.getUserById();
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 

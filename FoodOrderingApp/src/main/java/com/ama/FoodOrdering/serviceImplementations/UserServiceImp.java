@@ -5,6 +5,7 @@ import com.ama.FoodOrdering.enums.UserRole;
 import com.ama.FoodOrdering.exceptions.ResourceNotFoundException;
 import com.ama.FoodOrdering.repos.UserRepository;
 import com.ama.FoodOrdering.responses.UserResponse;
+import com.ama.FoodOrdering.services.AuthService;
 import com.ama.FoodOrdering.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,9 @@ public class UserServiceImp implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @Override
     public User createUser(User user) {
         user.setCreatedOn(LocalDateTime.now());
@@ -30,9 +35,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User updateUser(Long user_id, Map<String, Object> updates) throws ResourceNotFoundException {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + user_id + " not found."));
+    public User updateUser(Map<String, Object> updates) throws ResourceNotFoundException {
+        User user = userRepository.findById(authService.getCurrentUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + authService.getCurrentUserId() + " not found."));
         updates.forEach((key, value) -> {
             Field field = ReflectionUtils.findField(User.class, key);
             if (field != null) {
@@ -46,17 +51,17 @@ public class UserServiceImp implements UserService {
             }
         });
         user.setModifiedOn(LocalDateTime.now());
-        user.setModifiedBy(user_id);
+        user.setModifiedBy(authService.getCurrentUserId());
 
         return userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
+    public void deleteUser() {
+        Optional<User> user = userRepository.findById(authService.getCurrentUserId());
         if (user.isEmpty()) {
             // Throwing custom exception when the user is not found
-            throw new ResourceNotFoundException("User with ID " + userId + " not found.");
+            throw new ResourceNotFoundException("User with ID " + authService.getCurrentUserId() + " not found.");
         }
 
         // Soft delete logic: setting deletedOn timestamp
@@ -66,9 +71,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserResponse getUserById(Long user_id) throws ResourceNotFoundException {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + user_id + " not found."));
+    public UserResponse getUserById() throws ResourceNotFoundException {
+        User user = userRepository.findById(authService.getCurrentUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + authService.getCurrentUserId() + " not found."));
         UserResponse response = new UserResponse(
                 user.getId(),
                 user.getName(),
@@ -81,6 +86,16 @@ public class UserServiceImp implements UserService {
 
     @Override
     public List<UserResponse> getAllUsers() {
+        User authorisedUuser = userRepository.findById(authService.getCurrentUserId()).orElseThrow();
+        if (authorisedUuser.getRole() != UserRole.ADMIN) {
+            try {
+                throw new AccessDeniedException("User is not authorized to perform this action");
+            } catch (AccessDeniedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         List<User> users = userRepository.findAll();
 
         return users.stream()

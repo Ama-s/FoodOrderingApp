@@ -9,6 +9,7 @@ import com.ama.FoodOrdering.repos.InvoiceRepository;
 import com.ama.FoodOrdering.repos.PaymentRepository;
 import com.ama.FoodOrdering.repos.UserRepository;
 import com.ama.FoodOrdering.responses.PaymentResponse;
+import com.ama.FoodOrdering.services.AuthService;
 import com.ama.FoodOrdering.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -30,6 +31,9 @@ public class PaymentServiceImp implements PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @Override
     public Payment makePayment(Long invoice_id) throws ChangeSetPersister.NotFoundException {
         Invoice invoice = invoiceRepository.findById(invoice_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
@@ -43,8 +47,8 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Integer getTotalPaid(Long user_id) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+    public Integer getTotalPaid() throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(authService.getCurrentUserId()).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         Set<Invoice> userInvoices = user.getInvoices();
 
         Integer totalPaid = 0;
@@ -57,8 +61,8 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Integer getTotalOwed(Long user_id) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+    public Integer getTotalOwed() throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(authService.getCurrentUserId()).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         Set<Invoice> userInvoices = user.getInvoices();
 
         Integer totalOwed = 0;
@@ -71,8 +75,8 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Integer getTotalOverdue(Long user_id) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(user_id)
+    public Integer getTotalOverdue() throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(authService.getCurrentUserId())
 
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         Set<Invoice> userInvoices = user.getInvoices();
@@ -87,8 +91,8 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public List<PaymentResponse> getAccountSummary(Long user_id) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(user_id)
+    public List<PaymentResponse> getAccountSummary() throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(authService.getCurrentUserId())
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         List<Payment> payments = paymentRepository.findByUser(user);
 
@@ -101,28 +105,6 @@ public class PaymentServiceImp implements PaymentService {
                     payment.getInvoice().getId(),
                     payment.getPaymentIssueDate(),
                     payment.getStatus())
-        ).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PaymentResponse> getMonthlyBillByUser(Long user_id) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(user_id)
-
-                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-
-        // Assuming you have a method to filter payments within a specific month
-        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
-        LocalDate endOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
-
-        List<Payment> payments = paymentRepository.findByUserAndDateBetween(user, startOfMonth, endOfMonth);
-
-        return payments.stream().map(payment ->
-                new PaymentResponse(
-                        payment.getId(),
-                        payment.getInvoice().getId(),
-                        payment.getPaymentIssueDate(),
-                        payment.getStatus()
-                )
         ).collect(Collectors.toList());
     }
 }

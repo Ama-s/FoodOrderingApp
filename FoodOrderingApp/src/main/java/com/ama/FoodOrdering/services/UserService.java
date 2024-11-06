@@ -9,11 +9,11 @@ import java.util.Map;
 public interface UserService {
     User createUser(User user);
 
-    User updateUser(Long user_id, Map<String, Object> updates) throws ChangeSetPersister.NotFoundException;
+    User updateUser(Map<String, Object> updates) throws ChangeSetPersister.NotFoundException;
 
-    void deleteUser(Long user_id) throws ChangeSetPersister.NotFoundException;
+    void deleteUser() throws ChangeSetPersister.NotFoundException;
 
-    UserResponse getUserById(Long user_id) throws ChangeSetPersister.NotFoundException;
+    UserResponse getUserById() throws ChangeSetPersister.NotFoundException;
 
     List<UserResponse> getAllUsers();
 

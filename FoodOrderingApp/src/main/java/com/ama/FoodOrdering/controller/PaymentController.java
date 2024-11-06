@@ -34,53 +34,41 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/totalPaid/{user_id}")
-    public ResponseEntity<Integer> getTotalPaid(@PathVariable Long user_id) {
+    @GetMapping("/totalPaid")
+    public ResponseEntity<Integer> getTotalPaid() {
         try {
-            Integer totalPaid = paymentService.getTotalPaid(user_id);
+            Integer totalPaid = paymentService.getTotalPaid();
             return new ResponseEntity<>(totalPaid, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/totalOwed/{user_id}")
-    public ResponseEntity<Integer> getTotalOwed(@PathVariable Long user_id) {
+    @GetMapping("/totalOwed")
+    public ResponseEntity<Integer> getTotalOwed() {
         try {
-            Integer totalOwed = paymentService.getTotalOwed(user_id);
+            Integer totalOwed = paymentService.getTotalOwed();
             return new ResponseEntity<>(totalOwed, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/totalOverdue/{user_id}")
-    public ResponseEntity<Integer> getTotalOverdue(@PathVariable Long user_id) {
+    @GetMapping("/totalOverdue")
+    public ResponseEntity<Integer> getTotalOverdue() {
         try {
-            Integer totalOverdue = paymentService.getTotalOverdue(user_id);
+            Integer totalOverdue = paymentService.getTotalOverdue();
             return new ResponseEntity<>(totalOverdue, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/accountSummary/{user_id}")
-    public ResponseEntity<List<PaymentResponse>> getAccountSummary(@PathVariable Long user_id) {
+    @GetMapping("/accountSummary")
+    public ResponseEntity<List<PaymentResponse>> getAccountSummary() {
         try {
-            List<PaymentResponse> paymentResponses = paymentService.getAccountSummary(user_id);
+            List<PaymentResponse> paymentResponses = paymentService.getAccountSummary();
             return new ResponseEntity<>(paymentResponses, HttpStatus.OK);
-        } catch (ChangeSetPersister.NotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/monthlyBill/{user_id}")
-    public ResponseEntity<List<PaymentResponse>> getMonthlyBill(@PathVariable Long user_id) {
-        try {
-            List<PaymentResponse> monthlyBill = paymentService.getMonthlyBillByUser(user_id);
-            return new ResponseEntity<>(monthlyBill, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {

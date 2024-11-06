@@ -1,5 +1,6 @@
 package com.ama.FoodOrdering.auth.security;
 
+import com.ama.FoodOrdering.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,9 +13,11 @@ import java.util.Date;
 public class JwtUtil {
     private final String SECRET_KEY = "my_secret_key"; // Use a secure key later
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Long user_id, UserRole role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("user_id", user_id)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Token valid for 10 hours
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
