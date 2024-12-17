@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity()
 public class SecurityConfig {
 
     @Autowired
@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("/auth/login", "/user/createUser").permitAll();
+                    request.requestMatchers("/auth/login", "/user/createUser", "/login", "/vaadinServlet/**", "/VAADIN/**").permitAll();
                     request.anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable)
