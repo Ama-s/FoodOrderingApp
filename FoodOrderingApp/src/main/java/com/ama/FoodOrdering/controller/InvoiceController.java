@@ -1,7 +1,7 @@
 package com.ama.FoodOrdering.controller;
 
 import com.ama.FoodOrdering.entities.Invoice;
-import com.ama.FoodOrdering.responses.InvoiceResponse;
+import com.ama.FoodOrdering.dto.InvoiceResponse;
 import com.ama.FoodOrdering.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;

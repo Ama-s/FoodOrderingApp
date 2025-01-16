@@ -1,8 +1,8 @@
 package com.ama.FoodOrdering.controller;
 
-import com.ama.FoodOrdering.entities.OrderItem;
 import com.ama.FoodOrdering.entities.Order;
-import com.ama.FoodOrdering.responses.OrderResponse;
+import com.ama.FoodOrdering.dto.OrderResponse;
+import com.ama.FoodOrdering.entities.OrderItem;
 import com.ama.FoodOrdering.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -21,14 +21,19 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/placeOrder")
-    public ResponseEntity<Order> placeOrder(@RequestBody List<OrderItem> orderItems) {
+    public ResponseEntity<OrderResponse> placeOrder(@RequestBody List<OrderItem> orderItems) {
         try {
-            Order newOrder = orderService.placeOrder(orderItems);
-            return new ResponseEntity<>(HttpStatus.OK);
+            OrderResponse orderResponse = orderService.placeOrder(orderItems);
+            return ResponseEntity.ok(orderResponse);
         } catch (ChangeSetPersister.NotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteOrder(@RequestParam("id") Long order_id) {

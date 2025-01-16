@@ -8,7 +8,7 @@ import com.ama.FoodOrdering.enums.PaymentStatus;
 import com.ama.FoodOrdering.repos.InvoiceRepository;
 import com.ama.FoodOrdering.repos.PaymentRepository;
 import com.ama.FoodOrdering.repos.UserRepository;
-import com.ama.FoodOrdering.responses.PaymentResponse;
+import com.ama.FoodOrdering.dto.PaymentResponse;
 import com.ama.FoodOrdering.services.AuthService;
 import com.ama.FoodOrdering.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -21,7 +21,6 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
-    // this means when you go to the /add url, you add the details of the menuItem
     @PostMapping("/addItem")
     public ResponseEntity<MenuItem> addMenuItem(@RequestBody MenuItem menuItem){
         // The @RequestBody annotation converts the JSON to a MenuItem object.

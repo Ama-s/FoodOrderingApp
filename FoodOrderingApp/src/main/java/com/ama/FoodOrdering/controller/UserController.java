@@ -2,7 +2,7 @@ package com.ama.FoodOrdering.controller;
 
 import com.ama.FoodOrdering.entities.User;
 import com.ama.FoodOrdering.exceptions.ResourceNotFoundException;
-import com.ama.FoodOrdering.responses.UserResponse;
+import com.ama.FoodOrdering.dto.UserResponse;
 import com.ama.FoodOrdering.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -26,16 +25,16 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/updateUserDetails")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody Map<String, Object> updates){
-        try{
-            User updatedUser = userService.updateUser(updates);
+    @PutMapping("/updateUserDetails")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody User updatedUser) {
+        try {
+            User updatedUserEntity = userService.updateUser(updatedUser);
             UserResponse response = new UserResponse(
-                    updatedUser.getId(),
-                    updatedUser.getName(),
-                    updatedUser.getEmail(),
-                    updatedUser.getPassword(),
-                    updatedUser.getRole()
+                    updatedUserEntity.getId(),
+                    updatedUserEntity.getName(),
+                    updatedUserEntity.getEmail(),
+                    updatedUserEntity.getPassword(),
+                    updatedUserEntity.getRole()
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException e) {
@@ -44,6 +43,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser() {

@@ -1,6 +1,6 @@
 package com.ama.FoodOrdering.controller;
 import com.ama.FoodOrdering.entities.Payment;
-import com.ama.FoodOrdering.responses.PaymentResponse;
+import com.ama.FoodOrdering.dto.PaymentResponse;
 import com.ama.FoodOrdering.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;

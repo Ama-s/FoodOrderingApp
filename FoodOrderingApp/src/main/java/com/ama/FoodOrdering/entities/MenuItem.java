@@ -32,6 +32,9 @@ public class MenuItem {
     @Column(name = "status", length = 20)
     private MenuStatus status;
 
+    @Column(name = "image-url", length = 200)
+    private String imageUrl;
+
     @CreationTimestamp
     @Column(name = "created_on", updatable = false)
     private LocalDateTime createdOn;
@@ -140,5 +143,13 @@ public class MenuItem {
 
     public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
