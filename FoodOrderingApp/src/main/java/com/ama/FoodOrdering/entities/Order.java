@@ -2,6 +2,8 @@ package com.ama.FoodOrdering.entities;
 
 import com.ama.FoodOrdering.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,7 +28,8 @@ public class Order {
     //indicates which column in the Orders table references the primary key of the Users table
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("order")
     private List<OrderItem> orderItems;
 
     @OneToOne(mappedBy = "order")

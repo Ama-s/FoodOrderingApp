@@ -21,13 +21,12 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
-    // this means when you go to the /add url, you add the details of the menuItem
-    @PostMapping("/addItem/{admin_id}")
-    public ResponseEntity<MenuItem> addMenuItem(@RequestBody MenuItem menuItem, @PathVariable("admin_id") Long admin_id){
+    @PostMapping("/addItem")
+    public ResponseEntity<MenuItem> addMenuItem(@RequestBody MenuItem menuItem){
         // The @RequestBody annotation converts the JSON to a MenuItem object.
 
         try {
-            MenuItem newMenuItem = menuService.addMenuItem(menuItem, admin_id);
+            MenuItem newMenuItem = menuService.addMenuItem(menuItem);
             return new ResponseEntity<>(newMenuItem, HttpStatus.CREATED);
         } catch (ChangeSetPersister.NotFoundException | AccessDeniedException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -38,42 +37,42 @@ public class MenuController {
         // and a new resource was created.
     }
 
-    @DeleteMapping("/delete/{id}/{admin_id}")
-    public ResponseEntity<Void> deleteMenuItem(@PathVariable("id") Long id, @PathVariable("admin_id") Long admin_id) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
-        menuService.deleteMenuItem(id, admin_id);
+    @DeleteMapping("/delete/{menu_id}")
+    public ResponseEntity<Void> deleteMenuItem(@PathVariable("menu_id") Long id) throws ChangeSetPersister.NotFoundException, AccessDeniedException {
+        menuService.deleteMenuItem(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/update/{menu_id}/{admin_id}")
-    public ResponseEntity<MenuItem> updateMenuItem(@PathVariable Long menu_id, @PathVariable Long admin_id,
+    @PatchMapping("/update/{menu_id}")
+    public ResponseEntity<MenuItem> updateMenuItem(@PathVariable("menu_id") Long menu_id,
                                                    @RequestBody Map<String, Object> updates) {
         try {
-            MenuItem updatedMenuItem = menuService.updateMenuItem(menu_id, admin_id,updates);
+            MenuItem updatedMenuItem = menuService.updateMenuItem(menu_id,updates);
             return new ResponseEntity<>(updatedMenuItem, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException | AccessDeniedException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/addMenu/{admin_id}")
-    public ResponseEntity<List<MenuItem>> addMenu(@RequestBody List<MenuItem> menuItems, @PathVariable("admin_id") Long admin_id) {
+    @PostMapping("/addMenu")
+    public ResponseEntity<List<MenuItem>> addMenu(@RequestBody List<MenuItem> menuItems) {
         try {
-            List<MenuItem> newMenuItems = menuService.addMenu(menuItems, admin_id);
+            List<MenuItem> newMenuItems = menuService.addMenu(menuItems);
             return new ResponseEntity<>(newMenuItems, HttpStatus.CREATED);
         } catch (ChangeSetPersister.NotFoundException | AccessDeniedException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/dailyMenu/{user_id}")
-    public ResponseEntity<List<MenuItem>> showDailyMenu(@PathVariable("user_id") Long user_id) {
-        List<MenuItem> newDailyMenu = menuService.showDailyMenu(user_id);
+    @GetMapping("/dailyMenu")
+    public ResponseEntity<List<MenuItem>> showDailyMenu() {
+        List<MenuItem> newDailyMenu = menuService.showDailyMenu();
         return new ResponseEntity<List<MenuItem>>(newDailyMenu, HttpStatus.OK);
     }
 
-    @GetMapping("/dailySuggestion/{user_id}")
-    public ResponseEntity<MenuItem> getDailySuggestion(@PathVariable("user_id") Long user_id) {
-        MenuItem newDailySuggestion = menuService.getDailySuggestion(user_id);
+    @GetMapping("/dailySuggestion")
+    public ResponseEntity<MenuItem> getDailySuggestion() {
+        MenuItem newDailySuggestion = menuService.getDailySuggestion();
         return new ResponseEntity<MenuItem>(newDailySuggestion, HttpStatus.OK);
     }
 }

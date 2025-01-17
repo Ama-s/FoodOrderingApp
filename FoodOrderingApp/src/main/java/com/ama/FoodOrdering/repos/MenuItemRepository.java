@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MenuItemRepository extends JpaRepository <MenuItem, Long> {
-    // a custom query is created to select a random menu item.
-    @Query(value = "SELECT * FROM menu_item ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM menu_item WHERE deleted_on IS NULL ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
     Optional<MenuItem> findRandomMenuItem();
 
     // Method to delete a menu item by its id

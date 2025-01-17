@@ -1,7 +1,6 @@
-package com.ama.FoodOrdering.responses;
+package com.ama.FoodOrdering.dto;
 
 import com.ama.FoodOrdering.enums.InvoiceStatus;
-import com.ama.FoodOrdering.enums.PaymentStatus;
 
 public class InvoiceResponse {
     private Long id;

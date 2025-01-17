@@ -2,7 +2,7 @@ package com.ama.FoodOrdering.controller;
 
 import com.ama.FoodOrdering.entities.User;
 import com.ama.FoodOrdering.exceptions.ResourceNotFoundException;
-import com.ama.FoodOrdering.responses.UserResponse;
+import com.ama.FoodOrdering.dto.UserResponse;
 import com.ama.FoodOrdering.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -26,17 +25,16 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update/{user_id}")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody Map<String, Object> updates,
-                                                   @PathVariable Long user_id){
-        try{
-            User updatedUser = userService.updateUser(user_id, updates);
+    @PutMapping("/updateUserDetails")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody User updatedUser) {
+        try {
+            User updatedUserEntity = userService.updateUser(updatedUser);
             UserResponse response = new UserResponse(
-                    updatedUser.getId(),
-                    updatedUser.getName(),
-                    updatedUser.getEmail(),
-                    updatedUser.getPassword(),
-                    updatedUser.getRole()
+                    updatedUserEntity.getId(),
+                    updatedUserEntity.getName(),
+                    updatedUserEntity.getEmail(),
+                    updatedUserEntity.getPassword(),
+                    updatedUserEntity.getRole()
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ChangeSetPersister.NotFoundException e) {
@@ -46,10 +44,11 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{user_id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long user_id) {
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser() {
         try {
-            userService.deleteUser(user_id);
+            userService.deleteUser();
             return ResponseEntity.noContent().build(); // 204 No Content when deletion is successful
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage()); // Return custom error message
@@ -59,9 +58,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/getUser/{user_id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long user_id) throws ChangeSetPersister.NotFoundException {
-        UserResponse userResponse = userService.getUserById(user_id);
+    @GetMapping("/getMyDetails")
+    public ResponseEntity<UserResponse> getUserById() throws ChangeSetPersister.NotFoundException {
+        UserResponse userResponse = userService.getUserById();
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 

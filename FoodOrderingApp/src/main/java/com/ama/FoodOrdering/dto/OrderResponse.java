@@ -1,4 +1,4 @@
-package com.ama.FoodOrdering.responses;
+package com.ama.FoodOrdering.dto;
 
 import com.ama.FoodOrdering.enums.OrderStatus;
 

@@ -1,9 +1,15 @@
 package com.ama.FoodOrdering.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "OrderItem")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class OrderItem {
 
     @Id
@@ -13,7 +19,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false, referencedColumnName = "id")
-    //indicates which column in the OrderItem table references the primary key of the Orders table
+    @JsonIgnore
     private Order order;
 
     @ManyToOne
